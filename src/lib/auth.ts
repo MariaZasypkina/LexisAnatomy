@@ -1,18 +1,40 @@
 import { cookies } from 'next/headers';
-import * as bcrypt from 'bcrypt';
+import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import * as jose from 'jose';
 
 const AUTH_SECRET = process.env.AUTH_SECRET || 'your-secret-key-change-this';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2b$10$placeholder';
 
 const secret = new TextEncoder().encode(AUTH_SECRET);
 
 export async function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, 10);
+  const salt = randomBytes(16).toString('hex');
+  const digest = scryptSync(password, salt, 64).toString('hex');
+  return `scrypt$${salt}$${digest}`;
 }
 
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  return bcrypt.compare(password, hash);
+  if (!hash) return false;
+
+  // Supported format: scrypt$<salt>$<hexDigest>
+  if (hash.startsWith('scrypt$')) {
+    const parts = hash.split('$');
+    if (parts.length !== 3) return false;
+
+    const salt = parts[1];
+    const expectedHex = parts[2];
+    const actualHex = scryptSync(password, salt, 64).toString('hex');
+
+    const expected = Buffer.from(expectedHex, 'hex');
+    const actual = Buffer.from(actualHex, 'hex');
+    if (expected.length !== actual.length) return false;
+    return timingSafeEqual(expected, actual);
+  }
+
+  // Optional plain-text fallback for local/dev bootstrapping.
+  const expected = Buffer.from(hash, 'utf8');
+  const actual = Buffer.from(password, 'utf8');
+  if (expected.length !== actual.length) return false;
+  return timingSafeEqual(expected, actual);
 }
 
 export async function createToken(userId: string): Promise<string> {
