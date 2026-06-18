@@ -13,9 +13,15 @@ export async function createPost(postData: Omit<Post, '_id' | 'publishedAt' | 'u
   }
   
   const now = new Date();
+  const providedPublishedAt = (postData as any).publishedAt;
+  const publishedAt =
+    providedPublishedAt instanceof Date && !Number.isNaN(providedPublishedAt.getTime())
+      ? providedPublishedAt
+      : now;
+
   const result = await posts.insertOne({
     ...postData,
-    publishedAt: now,
+    publishedAt,
     updatedAt: now,
   });
   
@@ -37,7 +43,7 @@ export async function updatePost(id: string, updates: Partial<Post>) {
     }
   );
   
-  return result.modifiedCount > 0;
+  return result.matchedCount > 0;
 }
 
 export async function getPostById(id: string) {

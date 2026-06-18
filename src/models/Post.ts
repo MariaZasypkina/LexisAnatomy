@@ -15,6 +15,14 @@ export interface MythOrTruth {
   text: string;
 }
 
+export interface MythOrTruthEntry {
+  postSlug: string;
+  postTitle: string;
+  choice: 'Myth' | 'Truth';
+  explanation: string;
+  publishedAt?: Date;
+}
+
 export interface Post {
   _id?: ObjectId;
   title: string;
@@ -22,6 +30,8 @@ export interface Post {
   lead: string;
   mainExplanation: string;
   mythOrTruth: MythOrTruth;
+  mythOrTruthChoice?: 'Myth' | 'Truth';
+  mythOrTruthExplanation?: string;
   glossary: GlossaryItem[];
   whyThisMatters: string;
   keyTakeaways: string[];
@@ -54,4 +64,29 @@ export function generateSeoTitle(title: string): string {
 export function generateMetaDescription(lead: string): string {
   const excerpt = generateExcerpt(lead, 160);
   return excerpt;
+}
+
+export function getMythOrTruthEntriesFromPosts(posts: Post[]): MythOrTruthEntry[] {
+  return posts.reduce<MythOrTruthEntry[]>((entries, post) => {
+      const choice = post.mythOrTruthChoice ?? post.mythOrTruth?.label;
+      const explanation = post.mythOrTruthExplanation ?? post.mythOrTruth?.text;
+
+      if (!choice || !explanation || !post.slug || !post.title) {
+        return entries;
+      }
+
+      if (choice !== 'Myth' && choice !== 'Truth') {
+        return entries;
+      }
+
+      entries.push({
+        postSlug: post.slug,
+        postTitle: post.title,
+        choice,
+        explanation,
+        publishedAt: post.publishedAt,
+      });
+
+      return entries;
+    }, []);
 }

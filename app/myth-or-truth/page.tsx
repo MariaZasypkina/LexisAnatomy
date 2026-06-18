@@ -1,11 +1,19 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { getAllPosts } from '@/lib/posts';
+import { getMythOrTruthEntriesFromPosts } from '@/models/Post';
 
 export const metadata: Metadata = {
   title: 'Myth or Truth | Lexi\'s Anatomy',
   description: 'Some medical "facts" sound believable until you look closer. Explore myth-vs-fact moments.',
 };
 
-export default function MythOrTruthPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function MythOrTruthPage() {
+  const { items } = await getAllPosts(500, 0);
+  const entries = getMythOrTruthEntriesFromPosts(items);
+
   return (
     <div className="min-h-screen bg-white">
       <div className="bg-gradient-to-br from-pink-50 to-blue-50 py-12 md:py-16">
@@ -22,25 +30,42 @@ export default function MythOrTruthPage() {
           </p>
         </div>
 
-        <p className="text-gray-700 leading-relaxed mb-12">
+        <p className="text-gray-700 leading-relaxed mb-8">
           This page collects short myth-vs-fact moments from across Lexi's Anatomy. Each one starts with a common belief, checks it against real science, and explains the answer in plain English.
         </p>
 
-        <div className="bg-gradient-to-br from-pink-50 to-blue-50 p-8 rounded-lg mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Sample Myth Check</h2>
-          <div className="space-y-4">
-            <div className="border-l-4 border-pink-500 pl-4">
-              <p className="font-semibold text-pink-600 mb-1">Myth:</p>
-              <p className="text-gray-700">You only use 10% of your brain.</p>
-            </div>
-            <div className="border-l-4 border-blue-500 pl-4">
-              <p className="font-semibold text-blue-600 mb-1">Truth:</p>
-              <p className="text-gray-700">
-                Your brain is active through many connected regions, even when you are resting or doing simple tasks.
-              </p>
-            </div>
+        {entries.length === 0 ? (
+          <div className="bg-gradient-to-br from-pink-50 to-blue-50 p-8 rounded-lg mb-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">No Myth Checks Yet</h2>
+            <p className="text-gray-700">
+              Publish a fact post with Myth or Truth details and it will automatically appear here.
+            </p>
           </div>
-        </div>
+        ) : (
+          <div className="grid gap-6 mb-12">
+            {entries.map((entry) => {
+              const isMyth = entry.choice === 'Myth';
+              return (
+                <article key={`${entry.postSlug}-${entry.choice}`} className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                  <div className="mb-3">
+                    <span
+                      className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
+                        isMyth ? 'bg-pink-100 text-pink-700' : 'bg-blue-100 text-blue-700'
+                      }`}
+                    >
+                      {entry.choice}
+                    </span>
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">{entry.postTitle}</h2>
+                  <p className="text-gray-700 mb-4">{entry.explanation}</p>
+                  <Link href={`/posts/${entry.postSlug}`} className="text-sm font-semibold text-blue-700 hover:underline">
+                    Read the full investigation
+                  </Link>
+                </article>
+              );
+            })}
+          </div>
+        )}
 
         <div className="text-center bg-gray-50 p-8 rounded-lg">
           <p className="text-gray-700 mb-4">Heard a myth that sounds suspicious?</p>
