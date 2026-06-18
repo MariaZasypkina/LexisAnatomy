@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { getAllPosts } from '@/lib/posts';
-import { getMythOrTruthEntriesFromPosts } from '@/models/Post';
+import { getAllMythOrTruthEntries } from '@/lib/myths';
 
 export const metadata: Metadata = {
   title: 'Myth or Truth | Lexi\'s Anatomy',
@@ -11,8 +10,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function MythOrTruthPage() {
-  const { items } = await getAllPosts(500, 0);
-  const entries = getMythOrTruthEntriesFromPosts(items);
+  const entries = await getAllMythOrTruthEntries();
 
   return (
     <div className="min-h-screen bg-white">
@@ -46,7 +44,7 @@ export default async function MythOrTruthPage() {
             {entries.map((entry) => {
               const isMyth = entry.choice === 'Myth';
               return (
-                <article key={`${entry.postSlug}-${entry.choice}`} className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                <article key={entry.id} className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
                   <div className="mb-3">
                     <span
                       className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
@@ -56,11 +54,15 @@ export default async function MythOrTruthPage() {
                       {entry.choice}
                     </span>
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">{entry.postTitle}</h2>
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">{entry.title}</h2>
                   <p className="text-gray-700 mb-4">{entry.explanation}</p>
-                  <Link href={`/posts/${entry.postSlug}`} className="text-sm font-semibold text-blue-700 hover:underline">
-                    Read the full investigation
-                  </Link>
+                  {entry.postSlug ? (
+                    <Link href={`/posts/${entry.postSlug}`} className="text-sm font-semibold text-blue-700 hover:underline">
+                      Read the full investigation
+                    </Link>
+                  ) : (
+                    <p className="text-sm font-semibold text-slate-500">Standalone Myth Entry</p>
+                  )}
                 </article>
               );
             })}

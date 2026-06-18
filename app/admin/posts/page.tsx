@@ -10,9 +10,17 @@ export default async function AdminPostsPage() {
     <div className="mx-auto w-full max-w-5xl px-6 py-10">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold text-slate-900">Posts</h1>
-        <Link href="/admin/posts/new" className="rounded-lg bg-pink-600 px-4 py-2 font-semibold text-white hover:bg-pink-700">
-          New Post
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/admin/myths" className="rounded-lg border border-slate-300 px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50">
+            Myths
+          </Link>
+          <Link href="/admin/myths/new" className="rounded-lg border border-slate-300 px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50">
+            New Myth
+          </Link>
+          <Link href="/admin/posts/new" className="rounded-lg bg-pink-600 px-4 py-2 font-semibold text-white hover:bg-pink-700">
+            New Post
+          </Link>
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">

@@ -12,19 +12,62 @@ interface Post {
   publishedAt: string;
   coverImageUrl?: string;
   coverImageAlt?: string;
+  mythOrTruth?: {
+    label: 'Myth' | 'Truth';
+    text: string;
+  };
+  mythOrTruthChoice?: 'Myth' | 'Truth';
+  mythOrTruthExplanation?: string;
+}
+
+interface MythOrTruthEntry {
+  id: string;
+  sourceType: 'post' | 'standalone-myth';
+  postSlug?: string;
+  title: string;
+  choice: 'Myth' | 'Truth';
+  explanation: string;
 }
 
 export default function HomePage() {
-  const [featuredPost, setFeaturedPost] = useState<Post | null>(null);
+  const [latestPost, setLatestPost] = useState<Post | null>(null);
+  const [previousPost, setPreviousPost] = useState<Post | null>(null);
+  const [randomMythEntry, setRandomMythEntry] = useState<MythOrTruthEntry | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLatestPost = async () => {
       try {
-        const response = await fetch('/api/posts?limit=1&skip=0');
+        const response = await fetch('/api/posts?limit=50&skip=0&sortBy=recentlyAdded');
         const data = await response.json();
-        if (data.posts && data.posts.length > 0) {
-          setFeaturedPost(data.posts[0]);
+        const posts: Post[] = Array.isArray(data.posts) ? data.posts : [];
+
+        if (posts.length > 0) {
+          setLatestPost(posts[0]);
+        }
+
+        if (posts.length > 1) {
+          setPreviousPost(posts[1]);
+        }
+
+        const excludedSlugs = new Set(
+          [posts[0]?.slug, posts[1]?.slug].filter((slug): slug is string => Boolean(slug))
+        );
+
+        const mythResponse = await fetch('/api/myths');
+        const mythData = await mythResponse.json();
+        const allEntries: MythOrTruthEntry[] = Array.isArray(mythData.entries) ? mythData.entries : [];
+
+        const mythCandidates = allEntries.filter((entry) => {
+          if (!entry.postSlug) {
+            return true;
+          }
+          return !excludedSlugs.has(entry.postSlug);
+        });
+
+        if (mythCandidates.length > 0) {
+          const randomIndex = Math.floor(Math.random() * mythCandidates.length);
+          setRandomMythEntry(mythCandidates[randomIndex]);
         }
       } catch (error) {
         console.error('Error fetching featured post:', error);
@@ -42,18 +85,22 @@ export default function HomePage() {
       <div className="bg-gradient-to-br from-pink-50 via-white to-blue-50 py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center md:text-left">
-            <p className="text-pink-600 font-semibold text-sm mb-2">Fact of the Week</p>
+            <p className="text-pink-600 font-semibold text-sm mb-2">
+              {latestPost ? 'Latest Fact' : 'Fact of the Week'}
+            </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-              Why doesn't your heart sit exactly in the center?
+              {latestPost ? latestPost.title : "Why doesn't your heart sit exactly in the center?"}
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mb-8">
-              Lexi's Anatomy is a curious, teen-friendly biology and medicine blog where surprising facts turn into clear explanations. One question, one investigation, one reason it matters in real life and real medicine.
+              {latestPost
+                ? latestPost.lead
+                : "Lexi's Anatomy is a curious, teen-friendly biology and medicine blog where surprising facts turn into clear explanations. One question, one investigation, one reason it matters in real life and real medicine."}
             </p>
             <div className="flex flex-col md:flex-row gap-4">
-              {featuredPost ? (
+              {latestPost ? (
                 <>
                   <Link
-                    href={`/posts/${featuredPost.slug}`}
+                    href={`/posts/${latestPost.slug}`}
                     className="inline-block px-8 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-semibold text-center"
                   >
                     Read This Fact
@@ -81,11 +128,12 @@ export default function HomePage() {
       </div>
 
       {/* Featured post */}
-      {!loading && featuredPost && (
+      {!loading && previousPost && (
         <div className="max-w-4xl mx-auto px-6 py-16">
           <div className="bg-gradient-to-br from-pink-50 to-blue-50 rounded-lg p-8 md:p-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{featuredPost.title}</h2>
-            <p className="text-gray-700 text-lg mb-6">{featuredPost.excerpt}</p>
+            <p className="text-blue-700 text-sm font-semibold mb-2">Previous Fact</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">{previousPost.title}</h2>
+            <p className="text-gray-700 text-lg mb-6">{previousPost.excerpt}</p>
             <div className="mb-6">
               <span className="inline-block px-3 py-1 bg-pink-200 text-pink-800 rounded-full text-sm font-semibold mr-2">
                 Question-led
@@ -95,7 +143,7 @@ export default function HomePage() {
               </span>
             </div>
             <Link
-              href={`/posts/${featuredPost.slug}`}
+              href={`/posts/${previousPost.slug}`}
               className="inline-block px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold"
             >
               Read the Full Investigation
@@ -157,18 +205,30 @@ export default function HomePage() {
       <div className="bg-pink-50 py-16">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Myth or Truth</h2>
-          <div className="bg-white p-8 rounded-lg shadow-sm mb-8">
-            <p className="mb-4">
-              <span className="font-bold text-pink-600 block mb-2">Myth:</span>
-              <span className="text-gray-700">Your heart is completely on the left side.</span>
-            </p>
-            <p>
-              <span className="font-bold text-blue-600 block mb-2">Truth:</span>
-              <span className="text-gray-700">
-                It leans left, but a large part of it sits much closer to the center than many people think.
-              </span>
-            </p>
-          </div>
+          {randomMythEntry ? (
+            <div className="bg-white p-8 rounded-lg shadow-sm mb-8">
+              <p className="mb-2 text-sm font-semibold text-slate-500">From: {randomMythEntry.title}</p>
+              <p className="mb-4">
+                <span className={`font-bold block mb-2 ${randomMythEntry.choice === 'Myth' ? 'text-pink-600' : 'text-blue-600'}`}>
+                  {randomMythEntry.choice}:
+                </span>
+                <span className="text-gray-700">{randomMythEntry.explanation}</span>
+              </p>
+              {randomMythEntry.postSlug ? (
+                <Link href={`/posts/${randomMythEntry.postSlug}`} className="text-blue-700 font-semibold hover:underline">
+                  Read the full investigation
+                </Link>
+              ) : (
+                <Link href="/myth-or-truth" className="text-blue-700 font-semibold hover:underline">
+                  See more myth checks
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className="bg-white p-8 rounded-lg shadow-sm mb-8">
+              <p className="text-gray-700">Myth checks will appear here as soon as more posts are published.</p>
+            </div>
+          )}
           <div className="text-center">
             <Link
               href="/myth-or-truth"

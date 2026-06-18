@@ -61,16 +61,21 @@ export async function getPostBySlug(slug: string) {
   return posts.findOne({ slug });
 }
 
-export async function getAllPosts(limit: number = 10, skip: number = 0) {
+export async function getAllPosts(
+  limit: number = 10,
+  skip: number = 0,
+  sortBy: 'publishedAt' | 'recentlyAdded' = 'publishedAt'
+) {
   const db = await getDatabase();
   const posts = db.collection<Post>('posts');
-  
-  const items = await posts
-    .find({})
-    .sort({ publishedAt: -1 })
-    .limit(limit)
-    .skip(skip)
-    .toArray();
+  let query = posts.find({});
+  if (sortBy === 'recentlyAdded') {
+    query = query.sort({ _id: -1 });
+  } else {
+    query = query.sort({ publishedAt: -1 });
+  }
+
+  const items = await query.limit(limit).skip(skip).toArray();
   
   const total = await posts.countDocuments({});
   
