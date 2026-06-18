@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 interface Post {
@@ -80,48 +81,75 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="la-page min-h-screen">
+      <div className="mx-auto max-w-6xl px-6 pb-4 pt-10 md:pb-2 md:pt-12">
+        <h2 className="la-title mb-3 text-3xl font-bold md:text-4xl">
+          Science facts that unfold like small investigations
+        </h2>
+        <p className="la-subtitle max-w-3xl text-lg leading-relaxed">
+          A science blog built around one simple idea: surprising facts are easier to remember when they unfold like small investigations.
+        </p>
+      </div>
+
       {/* Hero */}
-      <div className="bg-gradient-to-br from-pink-50 via-white to-blue-50 py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center md:text-left">
-            <p className="text-pink-600 font-semibold text-sm mb-2">
-              {latestPost ? 'Latest Fact' : 'Fact of the Week'}
-            </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-              {latestPost ? latestPost.title : "Why doesn't your heart sit exactly in the center?"}
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mb-8">
-              {latestPost
-                ? latestPost.lead
-                : "Lexi's Anatomy is a curious, teen-friendly biology and medicine blog where surprising facts turn into clear explanations. One question, one investigation, one reason it matters in real life and real medicine."}
-            </p>
-            <div className="flex flex-col md:flex-row gap-4">
-              {latestPost ? (
-                <>
-                  <Link
-                    href={`/posts/${latestPost.slug}`}
-                    className="inline-block px-8 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-semibold text-center"
-                  >
-                    Read This Fact
-                  </Link>
-                  <Link
-                    href="/facts"
-                    className="inline-block px-8 py-3 bg-blue-100 text-blue-900 rounded-lg hover:bg-blue-200 transition-colors font-semibold text-center"
-                  >
-                    Explore All Facts
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/facts"
-                    className="inline-block px-8 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-semibold text-center"
-                  >
-                    Explore All Facts
-                  </Link>
-                </>
-              )}
+      <div className="la-hero py-14 md:py-20">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="la-panel grid items-center gap-8 p-5 md:grid-cols-[0.98fr_1.02fr] md:gap-8 md:p-6">
+            <div className="order-2 text-center md:order-1 md:text-left">
+              <p className="la-kicker mb-3 text-xs">
+                {latestPost ? 'Latest Fact' : 'Fact of the Week'}
+              </p>
+              <h1 className="la-title la-section-title mb-5 text-4xl font-bold leading-tight md:text-5xl lg:text-6xl">
+                {latestPost ? latestPost.title : "Why doesn't your heart sit exactly in the center?"}
+              </h1>
+              <p className="la-subtitle mb-8 max-w-2xl text-lg leading-relaxed">
+                {latestPost
+                  ? latestPost.lead
+                  : "Lexi&apos;s Anatomy is a curious, teen-friendly biology and medicine blog where surprising facts turn into clear explanations. One question, one investigation, one reason it matters in real life and real medicine."}
+              </p>
+              <hr className="la-divider mb-7" />
+              <div className="flex flex-col gap-4 md:flex-row">
+                {latestPost ? (
+                  <>
+                    <Link
+                      href={`/posts/${latestPost.slug}`}
+                      className="la-btn-primary px-8 py-3 text-center"
+                    >
+                      Read This Fact
+                    </Link>
+                    <Link
+                      href="/facts"
+                      className="la-btn-secondary px-8 py-3 text-center"
+                    >
+                      Explore All Facts
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/facts"
+                      className="la-btn-primary px-8 py-3 text-center"
+                    >
+                      Explore All Facts
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="order-1 mx-auto w-full max-w-[520px] md:order-2">
+              <div className="la-hero-portrait overflow-hidden p-1.5 md:p-2">
+                <div className="rounded-2xl bg-gradient-to-b from-[#f7f3ef] via-[#f3f5f7] to-[#e8eef3] p-1.5 md:p-2">
+                  <Image
+                    src="/lexi2.png"
+                    alt="Lexi in scrubs illustration"
+                    width={700}
+                    height={940}
+                    priority
+                    className="h-auto w-full rounded-xl object-contain scale-[1.08] md:scale-[1.15]"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -129,22 +157,23 @@ export default function HomePage() {
 
       {/* Featured post */}
       {!loading && previousPost && (
-        <div className="max-w-4xl mx-auto px-6 py-16">
-          <div className="bg-gradient-to-br from-pink-50 to-blue-50 rounded-lg p-8 md:p-12">
-            <p className="text-blue-700 text-sm font-semibold mb-2">Previous Fact</p>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{previousPost.title}</h2>
-            <p className="text-gray-700 text-lg mb-6">{previousPost.excerpt}</p>
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <div className="la-panel p-8 md:p-12">
+            <p className="mb-2 text-sm font-semibold text-[#6b7f97]">Previous Fact</p>
+            <h2 className="la-title la-section-title mb-4 text-2xl font-bold md:text-3xl">{previousPost.title}</h2>
+            <p className="la-subtitle mb-6 text-lg">{previousPost.excerpt}</p>
+            <hr className="la-rule mb-6" />
             <div className="mb-6">
-              <span className="inline-block px-3 py-1 bg-pink-200 text-pink-800 rounded-full text-sm font-semibold mr-2">
+              <span className="la-badge mr-2 bg-[#e7c5ce] text-[#2e3b5b]">
                 Question-led
               </span>
-              <span className="inline-block px-3 py-1 bg-blue-200 text-blue-800 rounded-full text-sm font-semibold">
+              <span className="la-badge bg-[#dce4ec] text-[#2e3b5b]">
                 Myth or Truth
               </span>
             </div>
             <Link
               href={`/posts/${previousPost.slug}`}
-              className="inline-block px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold"
+              className="la-btn-secondary px-6 py-2.5"
             >
               Read the Full Investigation
             </Link>
@@ -153,11 +182,11 @@ export default function HomePage() {
       )}
 
       {/* How each fact unfolds */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
+      <div className="mx-auto max-w-6xl px-6 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">How each fact unfolds</h2>
-          <p className="text-gray-600 text-lg">
-            Every Lexi's Anatomy post follows a simple pattern so science feels easier to explore and easier to remember.
+          <h2 className="la-title la-section-title mb-4 text-3xl font-bold">How each fact unfolds</h2>
+          <p className="la-subtitle text-lg">
+            Every Lexi&apos;s Anatomy post follows a simple pattern so science feels easier to explore and easier to remember.
           </p>
         </div>
 
@@ -184,55 +213,55 @@ export default function HomePage() {
               description: 'A short glossary explains the tricky word without sounding like a textbook.',
             },
           ].map((step, i) => (
-            <div key={i} className="bg-gray-50 p-6 rounded-lg">
+            <div key={i} className="la-card p-6">
               <div className="text-3xl mb-3">{step.icon}</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
-              <p className="text-gray-600">{step.description}</p>
+              <h3 className="la-title la-section-title mb-2 text-xl font-bold">{step.title}</h3>
+              <p className="la-subtitle">{step.description}</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-8 bg-blue-50 p-6 rounded-lg">
+        <div className="la-soft-note mt-8 p-6">
           <div className="text-2xl mb-3">💡</div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">See why it matters</h3>
-          <p className="text-gray-700">
+          <h3 className="la-title mb-2 text-xl font-bold">See why it matters</h3>
+          <p className="text-[#536079]">
             Each fact connects back to doctors, patients, parents, or everyday life.
           </p>
         </div>
       </div>
 
       {/* Myth spotlight */}
-      <div className="bg-pink-50 py-16">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Myth or Truth</h2>
+      <div className="bg-[#f7f3ef]/92 py-16">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="la-title la-section-title mb-8 text-center text-3xl font-bold">Myth or Truth</h2>
           {randomMythEntry ? (
-            <div className="bg-white p-8 rounded-lg shadow-sm mb-8">
-              <p className="mb-2 text-sm font-semibold text-slate-500">From: {randomMythEntry.title}</p>
+            <div className="la-card mb-8 p-8">
+              <p className="mb-2 text-sm font-semibold text-[#6b7f97]">From: {randomMythEntry.title}</p>
               <p className="mb-4">
-                <span className={`font-bold block mb-2 ${randomMythEntry.choice === 'Myth' ? 'text-pink-600' : 'text-blue-600'}`}>
+                <span className={`mb-2 block font-bold ${randomMythEntry.choice === 'Myth' ? 'text-[#7f94ac]' : 'text-[#2e3b5b]'}`}>
                   {randomMythEntry.choice}:
                 </span>
-                <span className="text-gray-700">{randomMythEntry.explanation}</span>
+                <span className="text-[#3f5369]">{randomMythEntry.explanation}</span>
               </p>
               {randomMythEntry.postSlug ? (
-                <Link href={`/posts/${randomMythEntry.postSlug}`} className="text-blue-700 font-semibold hover:underline">
+                <Link href={`/posts/${randomMythEntry.postSlug}`} className="la-link font-semibold hover:underline">
                   Read the full investigation
                 </Link>
               ) : (
-                <Link href="/myth-or-truth" className="text-blue-700 font-semibold hover:underline">
+                <Link href="/myth-or-truth" className="la-link font-semibold hover:underline">
                   See more myth checks
                 </Link>
               )}
             </div>
           ) : (
-            <div className="bg-white p-8 rounded-lg shadow-sm mb-8">
-              <p className="text-gray-700">Myth checks will appear here as soon as more posts are published.</p>
+            <div className="la-card mb-8 p-8">
+              <p className="text-[#3f5369]">Myth checks will appear here as soon as more posts are published.</p>
             </div>
           )}
           <div className="text-center">
             <Link
               href="/myth-or-truth"
-              className="inline-block px-6 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-semibold"
+              className="la-btn-primary px-6 py-2.5"
             >
               See More Myths
             </Link>
@@ -241,22 +270,23 @@ export default function HomePage() {
       </div>
 
       {/* Ask Lexi */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
-        <div className="bg-gradient-to-r from-pink-50 to-blue-50 p-8 md:p-12 rounded-lg">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Ask Lexi a question</h2>
-          <p className="text-gray-700 mb-8">
+      <div className="mx-auto max-w-6xl px-6 py-16">
+        <div className="la-panel p-8 md:p-12">
+          <h2 className="la-title la-section-title mb-4 text-3xl font-bold">Ask Lexi a question</h2>
+          <p className="mb-8 text-[#3f5369]">
             Have you ever heard a strange body fact and wondered if it was actually true? Send a question, suggest a myth, or help choose a future topic for the site.
           </p>
+          <hr className="la-rule mb-8" />
           <div className="flex flex-col md:flex-row gap-4">
             <Link
               href="/contact"
-              className="inline-block px-6 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-semibold"
+              className="la-btn-primary px-6 py-2.5"
             >
               Submit a Question
             </Link>
             <Link
               href="/contact"
-              className="inline-block px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold"
+              className="la-btn-secondary px-6 py-2.5"
             >
               Suggest a Myth
             </Link>
@@ -265,87 +295,87 @@ export default function HomePage() {
       </div>
 
       {/* About teaser */}
-      <div className="bg-gray-50 py-16">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">About the project</h2>
-          <p className="text-gray-700 text-lg mb-8">
-            Lexi's Anatomy is an English-language biology and medicine blog created by Lexi, a student who wants to become a doctor. The goal is simple: find surprising facts, explain them clearly, and show why they matter beyond the classroom.
+      <div className="bg-[#f2f4f6] py-16">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="la-title la-section-title mb-4 text-3xl font-bold">About the project</h2>
+          <p className="mb-8 text-lg text-[#536079]">
+            Lexi&apos;s Anatomy is an English-language biology and medicine blog created by Lexi, a student who wants to become a doctor. The goal is simple: find surprising facts, explain them clearly, and show why they matter beyond the classroom.
           </p>
           <Link
             href="/about"
-            className="inline-block px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold"
+            className="la-btn-secondary px-6 py-2.5"
           >
-            Read About Lexi's Anatomy
+            Read About Lexi&apos;s Anatomy
           </Link>
         </div>
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="max-w-4xl mx-auto px-6">
+      <footer className="border-t border-[color:var(--line)] bg-[#253341] py-12 text-[#d0d9e0]">
+        <div className="mx-auto max-w-6xl px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="font-bold text-white mb-4">Lexi's Anatomy</h3>
+              <h3 className="la-title mb-4 text-xl font-bold text-[#f5f8fb]">Lexi&apos;s Anatomy</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/" className="hover:text-white">
+                  <Link href="/" className="transition-colors hover:text-white">
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link href="/facts" className="hover:text-white">
+                  <Link href="/facts" className="transition-colors hover:text-white">
                     All Facts
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="hover:text-white">
+                  <Link href="/about" className="transition-colors hover:text-white">
                     About
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-bold text-white mb-4">Explore</h3>
+              <h3 className="mb-4 font-bold text-white">Explore</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/myth-or-truth" className="hover:text-white">
+                  <Link href="/myth-or-truth" className="transition-colors hover:text-white">
                     Myth or Truth
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about-lexi" className="hover:text-white">
+                  <Link href="/about-lexi" className="transition-colors hover:text-white">
                     About Lexi
                   </Link>
                 </li>
                 <li>
-                  <Link href="/sources" className="hover:text-white">
+                  <Link href="/sources" className="transition-colors hover:text-white">
                     Sources
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-bold text-white mb-4">Get Involved</h3>
+              <h3 className="mb-4 font-bold text-white">Get Involved</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/contact" className="hover:text-white">
+                  <Link href="/contact" className="transition-colors hover:text-white">
                     Submit a Question
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-bold text-white mb-4">Legal</h3>
+              <h3 className="mb-4 font-bold text-white">Legal</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <p>Lexi's Anatomy is for educational purposes only and does not provide medical advice.</p>
+                  <p>Lexi&apos;s Anatomy is for educational purposes only and does not provide medical advice.</p>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-gray-700 pt-8 text-sm">
-            <p>&copy; 2026 Lexi's Anatomy. All rights reserved.</p>
+          <div className="border-t border-[#445b72] pt-8 text-sm">
+            <p>&copy; 2026 Lexi&apos;s Anatomy. All rights reserved.</p>
           </div>
         </div>
       </footer>

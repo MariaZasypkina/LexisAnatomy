@@ -41,34 +41,36 @@ export default function FactsPage() {
   const totalPages = Math.ceil(total / itemsPerPage);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50">
-      <div className="max-w-4xl mx-auto px-6 py-12">
+    <div className="la-page min-h-screen">
+      <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">All Facts</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Explore every investigation published on Lexi's Anatomy, from anatomy and microbiology to medical myths, brain facts, and everyday questions about how the body works.
+          <h1 className="la-title la-section-title mb-4 text-4xl font-bold md:text-5xl">All Facts</h1>
+          <p className="la-subtitle mx-auto max-w-2xl text-lg">
+            Explore every investigation published on Lexi&apos;s Anatomy, from anatomy and microbiology to medical myths, brain facts, and everyday questions about how the body works.
           </p>
         </div>
 
-        <div className="mb-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-          <p className="text-gray-700">
+        <div className="la-card mb-8 p-4">
+          <p className="text-[#3f5369]">
             <span className="font-semibold">Newest first:</span> Short, surprising science stories you can read in just a few minutes.
           </p>
         </div>
 
+        <hr className="la-divider mb-8" />
+
         {loading ? (
           <div className="text-center py-12">
-            <p className="text-gray-600">Loading posts...</p>
+            <p className="la-subtitle">Loading posts...</p>
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No facts yet — but the next mystery is already on its way.</p>
+            <p className="la-subtitle text-lg">No facts yet — but the next mystery is already on its way.</p>
           </div>
         ) : (
           <div className="space-y-6 mb-12">
             {posts.map((post) => (
               <Link key={post._id} href={`/posts/${post.slug}`}>
-                <article className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden cursor-pointer">
+                <article className="la-card cursor-pointer overflow-hidden transition-transform duration-200 hover:-translate-y-0.5">
                   <div className="grid md:grid-cols-3 gap-6 p-6">
                     {post.coverImageUrl && (
                       <div className="md:col-span-1">
@@ -80,9 +82,9 @@ export default function FactsPage() {
                       </div>
                     )}
                     <div className={post.coverImageUrl ? 'md:col-span-2' : 'md:col-span-3'}>
-                      <h2 className="text-2xl font-bold text-gray-900 mb-2">{post.title}</h2>
-                      <p className="text-gray-600 mb-4">{post.excerpt}</p>
-                      <time className="text-sm text-gray-500">
+                      <h2 className="la-title la-section-title mb-2 text-2xl font-bold">{post.title}</h2>
+                      <p className="la-subtitle mb-4">{post.excerpt}</p>
+                      <time className="text-sm text-[#6d7f91]">
                         {new Date(post.publishedAt).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
@@ -102,15 +104,15 @@ export default function FactsPage() {
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-6 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="la-btn-primary px-6 py-2.5 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Older facts
             </button>
-            <span className="text-gray-600">Page {page} of {totalPages}</span>
+            <span className="la-subtitle">Page {page} of {totalPages}</span>
             <button
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page === totalPages}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="la-btn-secondary px-6 py-2.5 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Newer facts
             </button>

@@ -40,12 +40,12 @@ export default async function PostPage({ params }: PageProps) {
   }
 
   return (
-    <article className="min-h-screen bg-white">
-      <div className="bg-gradient-to-br from-pink-50 to-blue-50 py-12">
+    <article className="la-page min-h-screen">
+      <div className="la-hero py-12">
         <div className="max-w-3xl mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{post.title}</h1>
-          <p className="text-gray-600 text-lg">{post.lead}</p>
-          <time className="block text-sm text-gray-500 mt-4">
+          <h1 className="la-title la-section-title mb-4 text-4xl font-bold md:text-5xl">{post.title}</h1>
+          <p className="la-subtitle text-lg">{post.lead}</p>
+          <time className="mt-4 block text-sm text-[#6b7f92]">
             {new Date(post.publishedAt).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
@@ -57,51 +57,52 @@ export default async function PostPage({ params }: PageProps) {
 
       {post.coverImageUrl && (
         <div className="max-w-3xl mx-auto px-6 py-8">
-          <img src={post.coverImageUrl} alt={post.coverImageAlt} className="w-full rounded-lg shadow-lg" />
+          <img src={post.coverImageUrl} alt={post.coverImageAlt} className="la-card w-full rounded-lg" />
         </div>
       )}
 
       <div className="max-w-3xl mx-auto px-6 py-12">
-        <div className="mb-12 prose prose-lg max-w-none">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">The Explanation</h2>
-          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{post.mainExplanation}</p>
+        <hr className="la-divider mb-8" />
+        <div className="la-heading-stack mb-12 prose prose-lg max-w-none">
+          <h2 className="la-title la-section-title mb-4 text-2xl font-bold">The Explanation</h2>
+          <p className="whitespace-pre-wrap leading-relaxed text-[#3f5369]">{post.mainExplanation}</p>
         </div>
 
-        <div className="mb-12 bg-pink-50 p-6 rounded-lg border-l-4 border-pink-500">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Myth or Truth?</h2>
+        <div className="la-soft-note mb-12 border-l-4 border-[#bb6f88] p-6">
+          <h2 className="la-title la-section-title mb-4 text-2xl font-bold">Myth or Truth?</h2>
           <div className="space-y-2">
             <p>
-              <span className="font-semibold text-pink-600">{post.mythOrTruth.label}:</span> {post.mythOrTruth.text}
+              <span className="font-semibold text-[#a1536d]">{post.mythOrTruth.label}:</span> {post.mythOrTruth.text}
             </p>
           </div>
         </div>
 
         {post.glossary.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Key Terms</h2>
+            <h2 className="la-title la-section-title mb-4 text-2xl font-bold">Key Terms</h2>
             <div className="space-y-4">
               {post.glossary.map((item, i) => (
-                <div key={i} className="border-l-2 border-blue-500 pl-4">
-                  <p className="font-semibold text-gray-900">{item.term}</p>
-                  <p className="text-gray-700">{item.definition}</p>
+                <div key={i} className="border-l-2 border-[#6292b3] pl-4">
+                  <p className="font-semibold text-[#25384d]">{item.term}</p>
+                  <p className="text-[#3f5369]">{item.definition}</p>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        <div className="mb-12 bg-blue-50 p-6 rounded-lg">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Why This Matters</h2>
-          <p className="text-gray-700 leading-relaxed">{post.whyThisMatters}</p>
+        <div className="la-soft-note mb-12 p-6">
+          <h2 className="la-title la-section-title mb-4 text-2xl font-bold">Why This Matters</h2>
+          <p className="leading-relaxed text-[#3f5369]">{post.whyThisMatters}</p>
         </div>
 
         {post.keyTakeaways.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">3 Key Takeaways</h2>
+            <h2 className="la-title la-section-title mb-4 text-2xl font-bold">3 Key Takeaways</h2>
             <ul className="space-y-2">
               {post.keyTakeaways.map((takeaway, i) => (
-                <li key={i} className="flex gap-3 text-gray-700">
-                  <span className="text-pink-500 font-bold">{i + 1}.</span>
+                <li key={i} className="flex gap-3 text-[#3f5369]">
+                  <span className="font-bold text-[#b1627b]">{i + 1}.</span>
                   <span>{takeaway}</span>
                 </li>
               ))}
@@ -111,11 +112,11 @@ export default async function PostPage({ params }: PageProps) {
 
         {post.sources.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Sources</h2>
+            <h2 className="la-title la-section-title mb-4 text-2xl font-bold">Sources</h2>
             <ul className="space-y-2">
               {post.sources.map((source, i) => (
                 <li key={i}>
-                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 underline">
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="la-link underline">
                     {source.label}
                   </a>
                 </li>
@@ -124,9 +125,9 @@ export default async function PostPage({ params }: PageProps) {
           </div>
         )}
 
-        <div className="mt-12 pt-12 border-t border-gray-200 text-sm text-gray-600">
+        <div className="mt-12 border-t border-[color:var(--line)] pt-12 text-sm text-[#66798b]">
           <p>
-            <strong>Disclaimer:</strong> Lexi's Anatomy is for educational purposes only and does not provide medical advice, diagnosis, or treatment.
+            <strong>Disclaimer:</strong> Lexi&apos;s Anatomy is for educational purposes only and does not provide medical advice, diagnosis, or treatment.
           </p>
         </div>
       </div>

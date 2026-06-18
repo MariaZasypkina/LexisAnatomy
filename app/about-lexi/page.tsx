@@ -7,26 +7,26 @@ export const metadata: Metadata = {
 
 export default function AboutLexiPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="bg-gradient-to-br from-pink-50 to-blue-50 py-12 md:py-16">
+    <div className="la-page min-h-screen">
+      <div className="la-hero py-12 md:py-16">
         <div className="max-w-3xl mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">About Lexi</h1>
-          <p className="text-lg text-gray-600">Meet the student behind Lexi's Anatomy.</p>
+          <h1 className="la-title mb-4 text-4xl font-bold md:text-5xl">About Lexi</h1>
+          <p className="la-subtitle text-lg">Meet the student behind Lexi&apos;s Anatomy.</p>
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-6 py-12 md:py-16">
-        <div className="prose prose-lg max-w-none">
-          <p className="text-gray-700 leading-relaxed mb-6 text-lg">
-            Lexi is a student who wants to become a doctor and loves discovering strange, memorable facts about biology and medicine. Lexi's Anatomy began as a way to turn that curiosity into something shareable: a website where science feels welcoming, visual, and easier to understand.
+        <div className="la-heading-stack prose prose-lg max-w-none">
+          <p className="mb-6 text-lg leading-relaxed text-[#3f5369]">
+            Lexi is a student who wants to become a doctor and loves discovering strange, memorable facts about biology and medicine. Lexi&apos;s Anatomy began as a way to turn that curiosity into something shareable: a website where science feels welcoming, visual, and easier to understand.
           </p>
 
-          <p className="text-gray-700 leading-relaxed mb-6">
+          <p className="mb-6 leading-relaxed text-[#3f5369]">
             This project is also a way to practice something future doctors need every day — explaining complex ideas clearly, calmly, and honestly. That is why the site focuses on reliable sources, simple wording, and facts that connect back to patients, families, and real-world medicine.
           </p>
 
-          <div className="bg-pink-50 p-6 rounded-lg my-8 border-l-4 border-pink-500">
-            <p className="text-gray-800 italic text-lg">Curious about the human body? So is Lexi.</p>
+          <div className="la-soft-note my-8 border-l-4 border-[#bb6f88] p-6">
+            <p className="text-lg italic text-[#364c63]">Curious about the human body? So is Lexi.</p>
           </div>
         </div>
       </div>
