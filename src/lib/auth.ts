@@ -2,20 +2,25 @@ import { cookies } from 'next/headers';
 import * as bcrypt from 'bcrypt';
 import * as jose from 'jose';
 
-const AUTH_SECRET = process.env.AUTH_SECRET || 'your-secret-key-change-this';
-const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2b$10$placeholder';
-
-const secret = new TextEncoder().encode(AUTH_SECRET);
+function getAuthSecret(): Uint8Array {
+  const authSecret = process.env.AUTH_SECRET;
+  if (!authSecret) {
+    throw new Error('AUTH_SECRET environment variable is not set');
+  }
+  return new TextEncoder().encode(authSecret);
+}
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
 }
 
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
+  if (!hash) return false;
   return bcrypt.compare(password, hash);
 }
 
 export async function createToken(userId: string): Promise<string> {
+  const secret = getAuthSecret();
   const token = await new jose.SignJWT({ userId })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -27,9 +32,10 @@ export async function createToken(userId: string): Promise<string> {
 
 export async function verifyToken(token: string) {
   try {
+    const secret = getAuthSecret();
     const verified = await jose.jwtVerify(token, secret);
     return verified.payload;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

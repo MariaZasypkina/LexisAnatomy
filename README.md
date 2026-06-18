@@ -38,7 +38,7 @@ npm install
 cp .env.example .env.local
 ```
 
-Fill in your MongoDB URI and admin password.
+Fill in your MongoDB URI, `AUTH_SECRET`, and `ADMIN_PASSWORD_HASH`.
 
 3. Start the development server:
 ```bash
@@ -50,16 +50,16 @@ npm run dev
 ## Project Structure
 
 ```
+app/
+  admin/                # Admin dashboard and auth
+  api/                  # API routes
+  facts/                # Public facts archive
+  posts/[slug]/         # Individual post pages
+  about/                # Static pages
+  contact/
+  sources/
+  myth-or-truth/
 src/
-  app/
-    admin/              # Admin dashboard and auth
-    api/                # API routes
-    facts/              # Public facts archive
-    posts/[slug]/       # Individual post pages
-    about/              # Static pages
-    contact/
-    sources/
-    myth-or-truth/
   lib/
     db.ts              # MongoDB connection
     auth.ts            # Authentication
@@ -72,7 +72,7 @@ src/
 ## Admin Access
 
 1. Go to `/admin/login`
-2. Enter your admin password (set in `.env.local`)
+2. Enter your admin password (the plain password that matches `ADMIN_PASSWORD_HASH` in `.env.local`)
 3. Create, edit, and publish posts
 
 ## Creating a Post
@@ -94,7 +94,7 @@ All fields with * are required.
 
 - `MONGODB_URI` - MongoDB connection string
 - `AUTH_SECRET` - JWT signing secret
-- `ADMIN_PASSWORD` - Admin login password
+- `ADMIN_PASSWORD_HASH` - Bcrypt hash for admin login password
 - `NEXT_PUBLIC_SITE_URL` - Site URL for SEO and sharing
 
 ## Deployment
