@@ -39,6 +39,13 @@ export default async function PostPage({ params }: PageProps) {
     notFound();
   }
 
+  const mythOrTruthDisplayLabel =
+    post.mythOrTruth.label === 'Myth'
+      ? "No, it's a Myth"
+      : post.mythOrTruth.label === 'Truth'
+        ? "Yes, it's a Truth"
+        : post.mythOrTruth.label;
+
   return (
     <article className="la-page min-h-screen">
       <div className="la-hero py-12">
@@ -72,7 +79,7 @@ export default async function PostPage({ params }: PageProps) {
           <h2 className="la-title la-section-title mb-4 text-2xl font-bold">Myth or Truth?</h2>
           <div className="space-y-2">
             <p>
-              <span className="font-semibold text-[#a1536d]">{post.mythOrTruth.label}:</span> {post.mythOrTruth.text}
+              <span className="font-semibold text-[#a1536d]">{mythOrTruthDisplayLabel}</span> {post.mythOrTruth.text}
             </p>
           </div>
         </div>

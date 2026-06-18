@@ -239,7 +239,7 @@ export default function HomePage() {
               <p className="mb-2 text-sm font-semibold text-[#6b7f97]">From: {randomMythEntry.title}</p>
               <p className="mb-4">
                 <span className={`mb-2 block font-bold ${randomMythEntry.choice === 'Myth' ? 'text-[#7f94ac]' : 'text-[#2e3b5b]'}`}>
-                  {randomMythEntry.choice}:
+                  {randomMythEntry.choice === 'Myth' ? "No, it's a Myth" : "Yes, it's a Truth"}
                 </span>
                 <span className="text-[#3f5369]">{randomMythEntry.explanation}</span>
               </p>

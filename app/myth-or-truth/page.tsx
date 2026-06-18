@@ -44,6 +44,7 @@ export default async function MythOrTruthPage() {
           <div className="grid gap-6 mb-12">
             {entries.map((entry) => {
               const isMyth = entry.choice === 'Myth';
+              const mythOrTruthDisplayLabel = isMyth ? "No, it's a Myth" : "Yes, it's a Truth";
               return (
                 <article key={entry.id} className="la-card p-6">
                   <div className="mb-3">
@@ -52,7 +53,7 @@ export default async function MythOrTruthPage() {
                         isMyth ? 'bg-[#f8e6ee] text-[#a5546f]' : 'bg-[#e8f2f8] text-[#456c88]'
                       }`}
                     >
-                      {entry.choice}
+                      {mythOrTruthDisplayLabel}
                     </span>
                   </div>
                   <h2 className="la-title la-section-title mb-2 text-xl font-bold">{entry.title}</h2>
