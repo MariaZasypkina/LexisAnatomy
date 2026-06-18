@@ -8,7 +8,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '500', 10);
     const skip = parseInt(searchParams.get('skip') || '0', 10);
-    const { items, total } = await getAllPosts(limit, skip);
+    const sortBy = searchParams.get('sortBy') === 'recentlyAdded' ? 'recentlyAdded' : 'publishedAt';
+    const { items, total } = await getAllPosts(limit, skip, sortBy);
 
     return NextResponse.json({
       posts: items,
