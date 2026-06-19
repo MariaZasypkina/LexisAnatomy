@@ -1,4 +1,4 @@
-# Lexi's Anatomy — README
+# Lexi's Anatomy
 
 A fullstack Next.js blog for science facts with admin publishing capabilities.
 
